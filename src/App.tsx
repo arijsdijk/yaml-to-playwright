@@ -6,7 +6,7 @@ function App() {
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4 transition-colors">
       <div className="max-w-6xl mx-auto">
         <h1 className="text-4xl font-semibold text-primary dark:text-primary-dark text-center mb-8">
-          Power Apps YAML to Playwright locator converter
+          YAML to Playwright Locator
         </h1>
         <YamlConverter />
         <ThemeToggle />
