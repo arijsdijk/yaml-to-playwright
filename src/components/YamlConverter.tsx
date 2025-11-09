@@ -1,9 +1,19 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { convertYamlToPlaywright } from '../utils/yamlToPlaywright';
 
 const YamlConverter = () => {
   const [yamlInput, setYamlInput] = useState('');
   const [playwrightCode, setPlaywrightCode] = useState('');
+  const [showCopyConfirmation, setShowCopyConfirmation] = useState(false);
+
+  useEffect(() => {
+    if (showCopyConfirmation) {
+      const timer = setTimeout(() => {
+        setShowCopyConfirmation(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [showCopyConfirmation]);
 
   const handleConvert = () => {
     const converted = convertYamlToPlaywright(yamlInput);
@@ -12,6 +22,7 @@ const YamlConverter = () => {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(playwrightCode);
+    setShowCopyConfirmation(true);
   };
 
   return (
@@ -37,13 +48,20 @@ const YamlConverter = () => {
         <pre className="w-full h-[400px] p-4 font-mono text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm overflow-auto text-gray-900 dark:text-gray-100 transition-colors">
           {playwrightCode}
         </pre>
-        <button
-          onClick={handleCopy}
-          disabled={!playwrightCode}
-          className="w-full bg-primary dark:bg-primary-dark hover:bg-primary-hover dark:hover:bg-primary-dark-hover text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out shadow-sm disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed"
-        >
-          Copy to Clipboard
-        </button>
+        <div className="relative">
+          <button
+            onClick={handleCopy}
+            disabled={!playwrightCode}
+            className="w-full bg-primary dark:bg-primary-dark hover:bg-primary-hover dark:hover:bg-primary-dark-hover text-white font-medium py-2 px-4 rounded-lg transition duration-150 ease-in-out shadow-sm disabled:bg-gray-300 dark:disabled:bg-gray-700 disabled:cursor-not-allowed"
+          >
+            Copy to Clipboard
+          </button>
+          {showCopyConfirmation && (
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-4 py-2 bg-green-500 text-white rounded-lg shadow-lg transition-opacity duration-200 ease-in-out">
+              ✓ Copied to clipboard!
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
