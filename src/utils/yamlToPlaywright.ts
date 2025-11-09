@@ -9,7 +9,7 @@ export const convertYamlToPlaywright = (yamlContent: string): string => {
     Object.values(parsed.Screens).forEach((screen) => {
       screen.Children.forEach((child) => {
         const [elementName] = Object.keys(child);
-        playwrightCode += `await page.locator('[data-control-name="${elementName}"]').toBeVisible();\n`;
+        playwrightCode += `await expect(page.locator('[data-control-name="${elementName}"]')).toBeVisible();\n`;
       });
     });
 
