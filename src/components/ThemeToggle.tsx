@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 
 const ThemeToggle = () => {
+  // Set dark mode by default when the component mounts
+  useEffect(() => {
+    document.documentElement.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
+  }, []);
   const [darkMode, setDarkMode] = useState(() => {
-    // Check local storage and system preferences
+    // Check local storage, otherwise default to dark mode
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme) {
       return savedTheme === 'dark';
     }
-    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+    return true; // Default to dark mode
   });
 
   useEffect(() => {
