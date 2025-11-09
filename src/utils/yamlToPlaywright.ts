@@ -17,7 +17,7 @@ export const convertYamlToPlaywright = (yamlContent: string): string => {
           playwrightCode += `await expect(page.locator('[data-control-name="${elementName}"]')).${isVisible ? 'toBeVisible' : 'toBeHidden'}();\n`;
         } else {
           // Default to click action if no visibility property is specified
-          playwrightCode += `await page.locator('[data-control-name="${elementName}"]').click();\n`;
+          playwrightCode += `await expect(page.locator('[data-control-name="${elementName}"]')).toBeVisible();\n`;
         }
       });
     });
