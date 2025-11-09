@@ -12,6 +12,9 @@ export const convertYamlToPlaywright = (yamlContent: string): string => {
         const element = child[elementName];
         const locator = `page.locator('[data-control-name="${elementName}"]')`;
         
+        // Add comment with element name
+        playwrightCode += `\n// ${elementName}\n`;
+        
         // Check if it's a Button control
         const isButton = element.Control?.startsWith('Button@');
         
@@ -33,6 +36,9 @@ export const convertYamlToPlaywright = (yamlContent: string): string => {
             playwrightCode += `await ${locator}.click();\n`;
           }
         }
+        
+        // Add extra line break between children
+        playwrightCode += '\n';
       });
     });
 
