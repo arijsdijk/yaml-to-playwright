@@ -37,8 +37,10 @@ export const convertYamlToPlaywright = (yamlContent: string): string => {
           }
         }
         
-        // Add extra line break between children
-        playwrightCode += '\n';
+        // Add one line break between children
+        if (child !== screen.Children[screen.Children.length - 1]) {
+          playwrightCode += '\n';
+        }
       });
     });
 
