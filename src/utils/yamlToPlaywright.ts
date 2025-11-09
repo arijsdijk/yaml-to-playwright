@@ -10,14 +10,28 @@ export const convertYamlToPlaywright = (yamlContent: string): string => {
       screen.Children.forEach((child) => {
         const [elementName] = Object.keys(child);
         const element = child[elementName];
+        const locator = `page.locator('[data-control-name="${elementName}"]')`;
         
-        // Check for visibility property
+        // Check if it's a Button control
+        const isButton = element.Control?.startsWith('Button@');
+        
+        // Check for visibility property first
         if ('Properties' in element && 'Visible' in element.Properties) {
           const isVisible = String(element.Properties.Visible).toLowerCase() !== '=false';
-          playwrightCode += `await expect(page.locator('[data-control-name="${elementName}"]')).${isVisible ? 'toBeVisible' : 'toBeHidden'}();\n`;
+          playwrightCode += `await expect(${locator}).${isVisible ? 'toBeVisible' : 'toBeHidden'}();\n`;
+          
+          // Add click action for visible buttons
+          if (isButton && isVisible) {
+            playwrightCode += `await ${locator}.click();\n`;
+          }
         } else {
-          // Default to click action if no visibility property is specified
-          playwrightCode += `await expect(page.locator('[data-control-name="${elementName}"]')).toBeVisible();\n`;
+          // If no visibility property specified
+          playwrightCode += `await expect(${locator}).toBeVisible();\n`;
+          
+          // Add click action for buttons
+          if (isButton) {
+            playwrightCode += `await ${locator}.click();\n`;
+          }
         }
       });
     });
