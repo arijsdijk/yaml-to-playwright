@@ -9,7 +9,16 @@ export const convertYamlToPlaywright = (yamlContent: string): string => {
     Object.values(parsed.Screens).forEach((screen) => {
       screen.Children.forEach((child) => {
         const [elementName] = Object.keys(child);
-        playwrightCode += `await expect(page.locator('[data-control-name="${elementName}"]')).toBeVisible();\n`;
+        const element = child[elementName];
+        
+        // Check for visibility property
+        if ('Properties' in element && 'Visible' in element.Properties) {
+          const isVisible = String(element.Properties.Visible).toLowerCase() !== '=false';
+          playwrightCode += `await expect(page.locator('[data-control-name="${elementName}"]')).${isVisible ? 'toBeVisible' : 'toBeHidden'}();\n`;
+        } else {
+          // Default to click action if no visibility property is specified
+          playwrightCode += `await page.locator('[data-control-name="${elementName}"]').click();\n`;
+        }
       });
     });
 

@@ -1,9 +1,12 @@
+export interface YamlProperties {
+  Visible?: boolean | string;
+  [key: string]: any;
+}
+
 export interface YamlControl {
   Control: string;
   Variant?: string;
-  Properties: {
-    [key: string]: any;
-  };
+  Properties: YamlProperties;
 }
 
 export interface YamlChild {
